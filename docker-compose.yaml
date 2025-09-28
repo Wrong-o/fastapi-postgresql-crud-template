@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    enviroment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password 
+      POSTGRES_db: template_db 
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build:
+    depends_on:
+      - db
+    enviroment:
+      DATABASE_URL: postgresql+asyncpg://postgres:password@db:5432/template_db
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:
